@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% block title %}Prediction Result — ChurnShield AI{% endblock %}
+{% block body_class %}app-page{% endblock %}
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+{% block content %}
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span class="brand-icon">◈</span> ChurnShield<span class="brand-ai"> AI</span></div>
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('dashboard') }}" class="nav-item"><i class="fa fa-grid-2"></i> Dashboard</a>
+      <a href="{{ url_for('predict') }}" class="nav-item active"><i class="fa fa-brain"></i> New Prediction</a>
+      <a href="{{ url_for('history') }}" class="nav-item"><i class="fa fa-clock-rotate-left"></i> History</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-badge">
+        <div class="user-avatar">{{ user.full_name[0].upper() }}</div>
+        <div>
+          <div class="user-name">{{ user.full_name }}</div>
+          <div class="user-email">{{ user.email }}</div>
+        </div>
+      </div>
+      <a href="{{ url_for('logout') }}" class="btn btn-ghost btn-sm mt-2"><i class="fa fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Prediction <span class="gradient-text">Result</span></h1>
+        <p class="page-sub">Customer: <code>{{ input_data.customer_id }}</code></p>
+      </div>
+      <a href="{{ url_for('predict') }}" class="btn btn-primary"><i class="fa fa-plus"></i> New Prediction</a>
+    </header>
+
+    <!-- Result hero -->
+    <div class="result-hero {% if pred %}result-churn{% else %}result-safe{% endif %}">
+      <div class="result-icon">
+        <i class="fa {% if pred %}fa-triangle-exclamation{% else %}fa-shield-check{% endif %}"></i>
+      </div>
+      <div class="result-text">
+        <div class="result-label">Prediction Result</div>
+        <div class="result-verdict">{% if pred %}⚠ HIGH CHURN RISK{% else %}✓ CUSTOMER IS SAFE{% endif %}</div>
+        <div class="result-prob">
+          Churn Probability: <strong>{{ prob }}%</strong>
+        </div>
+      </div>
+      <div class="result-gauge">
+        <div class="gauge-wrap">
+          <div class="gauge-fill {% if prob > 60 %}danger{% elif prob > 40 %}warn{% else %}safe{% endif %}"
+               style="--pct: {{ prob }}"></div>
+          <div class="gauge-label">{{ prob }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts grid -->
+    <div class="charts-grid">
+      <!-- Pie chart -->
+      <div class="chart-card">
+        <h3><i class="fa fa-chart-pie"></i> Churn vs Retention</h3>
+        <canvas id="pieChart" height="220"></canvas>
+      </div>
+      <!-- Feature importance bar chart -->
+      <div class="chart-card wide">
+        <h3><i class="fa fa-chart-bar"></i> Feature Importance</h3>
+        <canvas id="barChart" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Horizontal bar: input values -->
+    <div class="chart-card">
+      <h3><i class="fa fa-sliders"></i> Customer Profile — Key Metrics</h3>
+      <canvas id="radarChart" height="120"></canvas>
+    </div>
+
+    <!-- Explanation + input summary -->
+    <div class="result-bottom">
+      <!-- Explainable AI -->
+      <div class="section-card">
+        <div class="card-header"><h2><i class="fa fa-lightbulb"></i> Why this prediction?</h2></div>
+        <ul class="explanation-list">
+          {% for e in explanations %}
+          <li class="explanation-item">
+            <span class="expl-icon">{{ e.icon }}</span>
+            <span>{{ e.text }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% if pred %}
+        <div class="recommendation-box">
+          <h4><i class="fa fa-bullhorn"></i> Recommended Actions</h4>
+          <ul>
+            <li>Offer a loyalty discount or upgrade plan</li>
+            <li>Assign a dedicated account manager</li>
+            <li>Proactively resolve open support tickets</li>
+            <li>Send personalized retention email / SMS</li>
+          </ul>
+        </div>
+        {% else %}
+        <div class="recommendation-box safe">
+          <h4><i class="fa fa-star"></i> Keep Up the Good Work</h4>
+          <ul>
+            <li>Continue with the existing service plan</li>
+            <li>Monitor support call frequency</li>
+            <li>Consider upsell / cross-sell opportunities</li>
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Input summary -->
+      <div class="section-card">
+        <div class="card-header"><h2><i class="fa fa-list-check"></i> Input Summary</h2></div>
+        <table class="summary-table">
+          <tr><td>Gender</td><td>{{ input_data.gender }}</td></tr>
+          <tr><td>Age</td><td>{{ input_data.age }}</td></tr>
+          <tr><td>Tenure</td><td>{{ input_data.tenure }} months</td></tr>
+          <tr><td>Monthly Charges</td><td>₹{{ "%.2f"|format(input_data.monthly_charges) }}</td></tr>
+          <tr><td>Total Charges</td><td>₹{{ "%.2f"|format(input_data.total_charges) }}</td></tr>
+          <tr><td>Contract Type</td><td>{{ input_data.contract_type }}</td></tr>
+          <tr><td>Internet Service</td><td>{{ input_data.internet_service }}</td></tr>
+          <tr><td>Payment Method</td><td>{{ input_data.payment_method }}</td></tr>
+          <tr><td>Support Calls</td><td>{{ input_data.support_calls }}</td></tr>
+          <tr><td>Senior Citizen</td><td>{% if input_data.senior_citizen %}Yes{% else %}No{% endif %}</td></tr>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+{% endblock %}
+{% block extra_js %}
+<script>
+const PROB = {{ prob }};
+const FI_LABELS = {{ fi_labels|safe }};
+const FI_VALUES = {{ fi_values|safe }};
+const IS_CHURN = {{ 'true' if pred else 'false' }};
+
+// Pie chart
+new Chart(document.getElementById('pieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Churn Risk', 'Retention'],
+    datasets: [{
+      data: [PROB, 100 - PROB],
+      backgroundColor: IS_CHURN ? ['#ef4444','#22c55e'] : ['#f97316','#22c55e'],
+      borderWidth: 0,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    cutout: '70%',
+    plugins: {
+      legend: { labels: { color: '#94a3b8', font: { family: 'DM Sans', size: 13 } } }
+    }
+  }
+});
+
+// Feature importance bar chart
+new Chart(document.getElementById('barChart'), {
+  type: 'bar',
+  data: {
+    labels: FI_LABELS,
+    datasets: [{
+      label: 'Importance (%)',
+      data: FI_VALUES,
+      backgroundColor: FI_VALUES.map((v,i) => i === 0 ? '#6366f1' : i === 1 ? '#8b5cf6' : '#a78bfa'),
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } },
+      y: { ticks: { color: '#94a3b8', font: { family: 'DM Sans' } }, grid: { display: false } }
+    }
+  }
+});
+
+// Profile bar chart
+const tenure = {{ input_data.tenure }};
+const monthly = {{ input_data.monthly_charges }};
+const calls = {{ input_data.support_calls }};
+const age = {{ input_data.age }};
+new Chart(document.getElementById('radarChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Tenure (months)', 'Monthly Charges (÷100 ₹)', 'Support Calls', 'Age'],
+    datasets: [{
+      label: 'Customer Value',
+      data: [tenure, monthly / 100, calls, age],
+      backgroundColor: ['#6366f1','#ef4444','#f97316','#22c55e'],
+      borderRadius: 5,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } },
+      y: { ticks: { color: '#64748b' }, grid: { color: '#1e293b' } }
+    }
+  }
+});
+
+// Animate gauge
+setTimeout(() => {
+  const fill = document.querySelector('.gauge-fill');
+  if (fill) fill.style.setProperty('--pct', PROB);
+}, 200);
+</script>
+{% endblock %}

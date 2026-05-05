@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}New Prediction — ChurnShield AI{% endblock %}
+{% block body_class %}app-page{% endblock %}
+{% block content %}
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span class="brand-icon">◈</span> ChurnShield<span class="brand-ai"> AI</span></div>
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('dashboard') }}" class="nav-item"><i class="fa fa-grid-2"></i> Dashboard</a>
+      <a href="{{ url_for('predict') }}" class="nav-item active"><i class="fa fa-brain"></i> New Prediction</a>
+      <a href="{{ url_for('history') }}" class="nav-item"><i class="fa fa-clock-rotate-left"></i> History</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-badge">
+        <div class="user-avatar">{{ user.full_name[0].upper() }}</div>
+        <div>
+          <div class="user-name">{{ user.full_name }}</div>
+          <div class="user-email">{{ user.email }}</div>
+        </div>
+      </div>
+      <a href="{{ url_for('logout') }}" class="btn btn-ghost btn-sm mt-2"><i class="fa fa-right-from-bracket"></i> Logout</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">New <span class="gradient-text">Churn Prediction</span></h1>
+        <p class="page-sub">Enter customer details to predict churn risk</p>
+      </div>
+    </header>
+
+    <div class="predict-form-card">
+      <form method="POST" action="{{ url_for('predict') }}" id="predictForm">
+
+        <!-- Section 1: Identity -->
+        <div class="form-section">
+          <div class="form-section-title"><i class="fa fa-id-card"></i> Customer Identity</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Customer ID <span class="optional">(optional)</span></label>
+              <input type="text" name="customer_id" class="form-input" placeholder="e.g. CUST-10923"/>
+            </div>
+            <div class="form-group">
+              <label>Gender <span class="required">*</span></label>
+              <select name="gender" class="form-input" required>
+                <option value="">— Select Gender —</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Age <span class="required">*</span></label>
+              <input type="number" name="age" class="form-input" placeholder="25" min="18" max="99" required/>
+            </div>
+            <div class="form-group">
+              <label>Senior Citizen</label>
+              <select name="senior_citizen" class="form-input">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Service -->
+        <div class="form-section">
+          <div class="form-section-title"><i class="fa fa-wifi"></i> Service Details</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Tenure (months) <span class="required">*</span></label>
+              <input type="number" name="tenure" class="form-input" placeholder="12" min="1" max="120" required/>
+            </div>
+            <div class="form-group">
+              <label>Internet Service <span class="required">*</span></label>
+              <select name="internet_service" class="form-input" required>
+                <option value="">— Select —</option>
+                <option value="Fiber">Fiber Optic</option>
+                <option value="DSL">DSL</option>
+                <option value="None">None</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Contract Type <span class="required">*</span></label>
+              <select name="contract_type" class="form-input" required>
+                <option value="">— Select —</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Yearly">Yearly</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Support Calls <span class="required">*</span></label>
+              <input type="number" name="support_calls" class="form-input" placeholder="2" min="0" max="20" required/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Billing -->
+        <div class="form-section">
+          <div class="form-section-title"><i class="fa fa-indian-rupee-sign"></i> Billing Information</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Monthly Charges (₹) <span class="required">*</span></label>
+              <div class="input-prefix">
+                <span class="prefix">₹</span>
+                <input type="number" name="monthly_charges" class="form-input prefix-input"
+                       placeholder="799" min="0" step="0.01" required/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Total Charges (₹) <span class="required">*</span></label>
+              <div class="input-prefix">
+                <span class="prefix">₹</span>
+                <input type="number" name="total_charges" class="form-input prefix-input"
+                       placeholder="9588" min="0" step="0.01" required/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Payment Method <span class="required">*</span></label>
+              <select name="payment_method" class="form-input" required>
+                <option value="">— Select —</option>
+                <option value="UPI">UPI (GPay / PhonePe / Paytm)</option>
+                <option value="Credit Card">Credit Card</option>
+                <option value="Debit Card">Debit Card</option>
+                <option value="Cash">Cash</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-actions">
+          <button type="reset" class="btn btn-ghost">
+            <i class="fa fa-rotate-left"></i> Reset
+          </button>
+          <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+            <span class="btn-text"><i class="fa fa-brain"></i> Predict Churn</span>
+            <span class="btn-loader hidden"><i class="fa fa-spinner fa-spin"></i> Analysing...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay hidden" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="spinner-ring"></div>
+    <p>Running AI model...</p>
+    <span>Analysing 10 features</span>
+  </div>
+</div>
+
+{% endblock %}
+{% block extra_js %}
+<script>
+document.getElementById('predictForm').addEventListener('submit', function(e) {
+  document.getElementById('loadingOverlay').classList.remove('hidden');
+  const btn = document.getElementById('submitBtn');
+  btn.querySelector('.btn-text').classList.add('hidden');
+  btn.querySelector('.btn-loader').classList.remove('hidden');
+  btn.disabled = true;
+});
+// Auto-calculate total charges
+const monthly = document.querySelector('[name=monthly_charges]');
+const tenure = document.querySelector('[name=tenure]');
+const total = document.querySelector('[name=total_charges]');
+function updateTotal() {
+  if (monthly.value && tenure.value) {
+    total.value = (parseFloat(monthly.value) * parseInt(tenure.value)).toFixed(2);
+  }
+}
+monthly.addEventListener('input', updateTotal);
+tenure.addEventListener('input', updateTotal);
+</script>
+{% endblock %}
