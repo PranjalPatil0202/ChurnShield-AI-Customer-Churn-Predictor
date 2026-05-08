@@ -1,135 +1,220 @@
 # ChurnShield AI — Customer Churn Predictor
 
-A production-ready Flask web application that predicts customer churn using a Random Forest ML model with explainable AI, interactive Chart.js visualizations, and a premium dark-themed SaaS UI.
+An advanced Flask web application that predicts customer churn using a Random Forest Machine Learning model with explainable AI, interactive analytics dashboards, and a modern SaaS-style UI.
 
 ---
 
-## 🚀 Features
+# 🚀 Features
 
-- **Authentication** — Register, Login, Logout with Werkzeug password hashing + session management
-- **Dashboard** — Personalized welcome, prediction stats, recent history table
-- **Churn Prediction Form** — 10 Indian-context features (UPI, ₹ pricing, etc.)
-- **Result Page** — Churn verdict, probability gauge, pie chart, feature importance bar chart, customer profile chart
-- **Explainable AI** — Human-readable reasons for every prediction
-- **Prediction History** — All past predictions stored in SQLite
-- **Premium UI** — Dark SaaS design, Syne + DM Sans fonts, glassmorphic cards, animations
-- **Error Pages** — Custom 404 and 500 handlers
-- **Deployment Ready** — Procfile, requirements.txt, .env support
+## Authentication System
+- User Registration
+- User Login & Logout
+- Secure password hashing using Werkzeug
+- Session-based authentication
 
 ---
 
-## 📁 Project Structure
+## Dashboard
+- Personalized user dashboard
+- Prediction statistics
+- Recent prediction history
+- Fixed sidebar navigation
 
-```
+---
+
+## Customer Churn Prediction
+- Real-time churn prediction using Machine Learning
+- Random Forest Classifier
+- Telecom customer churn analysis
+- Probability-based predictions
+
+---
+
+## Explainable AI
+- SHAP-based prediction explanations
+- Feature importance visualization
+- Human-readable churn reasons
+
+---
+
+## Analytics & Visualizations
+- Churn probability gauge
+- Doughnut chart
+- Feature importance bar graph
+- Interactive Chart.js visualizations
+
+---
+
+## Prediction History
+- SQLite database integration
+- Stores all previous predictions
+- Timestamp tracking
+- Prediction history page
+
+---
+
+## CSV Bulk Prediction
+- Upload customer CSV files
+- Bulk churn prediction
+- Download prediction results
+
+---
+
+## UI / UX
+- Modern dark SaaS-style interface
+- Responsive design
+- Glassmorphism-inspired cards
+- Animated UI elements
+- Professional dashboard layout
+
+---
+
+# 🛠️ Tech Stack
+
+## Frontend
+- HTML
+- CSS
+- JavaScript
+- Chart.js
+- Font Awesome
+
+---
+
+## Backend
+- Python
+- Flask
+
+---
+
+## Machine Learning
+- Scikit-learn
+- Random Forest Classifier
+- SHAP
+- Pandas
+- NumPy
+
+---
+
+## Database
+- SQLite
+
+---
+
+# 📁 Project Structure
+
+```bash
 churn_predictor/
-├── app.py                    # Main Flask application
+│
+├── app.py
 ├── requirements.txt
-├── Procfile                  # For Render/Railway/Heroku
-├── .env.example
+├── Procfile
+├── README.md
+│
 ├── model/
-│   ├── train_model.py        # ML training script
-│   ├── model.pkl             # Trained Random Forest model
-│   ├── scaler.pkl            # StandardScaler
-│   ├── encoders.pkl          # LabelEncoders
+│   ├── model.pkl
+│   ├── scaler.pkl
+│   ├── encoders.pkl
 │   ├── feature_importances.pkl
-│   └── churn_dataset.csv     # Generated training data
+│   ├── feature_names.pkl
+│   └── train_model.py
+│
 ├── templates/
 │   ├── base.html
-│   ├── index.html            # Landing page
+│   ├── index.html
 │   ├── login.html
 │   ├── register.html
 │   ├── dashboard.html
 │   ├── predict.html
 │   ├── result.html
 │   ├── history.html
-│   ├── 404.html
-│   └── 500.html
+│   ├── upload_csv.html
+│   └── csv_result.html
+│
 ├── static/
-│   ├── css/main.css
-│   └── js/main.js
-└── instance/
-    └── churn.db              # SQLite database (auto-created)
-```
-
----
-
-## ⚙️ Local Setup
-
-### 1. Clone / Extract the project
-```bash
-cd churn_predictor
-```
-
-### 2. Create a virtual environment
-```bash
+│   └── css/
+│       └── main.css
+│
+├── instance/
+│   └── churn.db
+│
+└── data/
+    └── WA_Fn-UseC_-Telco-Customer-Churn.csv
+⚙️ Installation & Setup
+1. Clone Repository
+git clone https://github.com/your-username/ChurnShield-AI-Customer-Churn-Predictor.git
+cd ChurnShield-AI-Customer-Churn-Predictor
+2. Create Virtual Environment
+Windows
 python -m venv venv
-source venv/bin/activate        # Linux/Mac
-venv\Scripts\activate           # Windows
-```
-
-### 3. Install dependencies
-```bash
+venv\Scripts\activate
+Linux / Mac
+python3 -m venv venv
+source venv/bin/activate
+3. Install Dependencies
 pip install -r requirements.txt
-```
-
-### 4. Train the ML model (only needed once)
-```bash
+4. Train the Model
 python model/train_model.py
-```
-This generates `model.pkl`, `scaler.pkl`, `encoders.pkl`, and `feature_importances.pkl`.
 
-### 5. Set environment variables
-```bash
-cp .env.example .env
-# Edit .env and set a strong SECRET_KEY
-```
+This generates:
 
-### 6. Run the app
-```bash
+model.pkl
+scaler.pkl
+encoders.pkl
+feature_importances.pkl
+5. Run Application
 python app.py
-```
 
-Open your browser at: **http://localhost:5000**
+Open browser:
 
----
+http://127.0.0.1:5000
+🤖 Machine Learning Model
+Algorithm Used
+Random Forest Classifier
+ML Workflow
+Data preprocessing
+Label Encoding
+Feature Scaling
+Model training
+Probability prediction
+SHAP explainability
+Features Used
+Gender
+Senior Citizen
+Partner
+Dependents
+Tenure
+Internet Service
+Contract Type
+Payment Method
+Monthly Charges
+Total Charges
+📊 Visualizations
+Churn vs Retention Doughnut Chart
+Feature Importance Bar Graph
+Churn Probability Gauge
+Prediction Analytics Dashboard
+🔐 Security Features
+Password hashing
+Protected routes
+Session authentication
+SQLite parameterized queries
+🚀 Deployment
 
-## 🌐 Deployment (Render / Railway)
+This project is deployment-ready for:
 
-1. Push the project to a GitHub repo
-2. Connect to Render / Railway
-3. Set environment variable: `SECRET_KEY=your-secret`
-4. Build command: `pip install -r requirements.txt && python model/train_model.py`
-5. Start command: `gunicorn app:app`
+Render
+Railway
+Heroku
+📌 Future Improvements
+Dark / Light mode toggle
+Email notifications
+Admin dashboard
+PostgreSQL integration
+Docker support
+FastAPI backend
+Real-time analytics
+👨‍💻 Author
 
----
+Pranjal Patil
 
-## 🤖 ML Model Details
-
-- **Algorithm**: Random Forest Classifier (100 estimators, max_depth=10)
-- **Features**: Gender, Age, Tenure, Monthly Charges, Total Charges, Contract Type, Internet Service, Payment Method, Support Calls, Senior Citizen
-- **Preprocessing**: LabelEncoding for categoricals, StandardScaler for numericals
-- **Dataset**: 2000 synthetic Indian telecom customers
-- **Accuracy**: ~69% (balanced dataset with realistic churn patterns)
-
----
-
-## 📊 Visualizations (Chart.js)
-
-- **Doughnut Chart** — Churn probability vs retention split
-- **Horizontal Bar Chart** — Feature importance from Random Forest
-- **Bar Chart** — Customer profile key metrics (tenure, charges, calls, age)
-- **Probability Gauge** — CSS conic-gradient animated gauge
-
----
-
-## 🔐 Security Notes
-
-- Passwords hashed with Werkzeug PBKDF2-SHA256
-- Sessions protected by Flask secret key
-- All routes requiring auth use `@login_required` decorator
-- SQL injection protected via parameterized SQLite queries
-- Never commit `.env` to version control
-
----
-
-Made with ❤️ for Indian Businesses | Flask + scikit-learn + Chart.js
+Made with ❤️ using Flask + Machine Learning
