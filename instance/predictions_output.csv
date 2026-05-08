@@ -1,0 +1,4 @@
+customer_id,gender,SeniorCitizen,Partner,Dependents,tenure,InternetService,Contract,PaymentMethod,MonthlyCharges,TotalCharges,Prediction,Probability
+C001,Male,0,Yes,No,12,DSL,Month-to-month,Electronic check,65.5,786.0,SAFE,25.82
+C002,Female,1,No,No,36,Fiber optic,One year,Credit card (automatic),92.3,3322.8,SAFE,18.13
+C003,Male,0,Yes,Yes,60,DSL,Two year,Bank transfer (automatic),45.0,2700.0,SAFE,6.74

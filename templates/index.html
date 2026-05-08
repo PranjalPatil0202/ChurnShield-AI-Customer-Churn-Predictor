@@ -1,67 +1,225 @@
 {% extends "base.html" %}
-{% block title %}ChurnShield AI — Predict Customer Churn with AI{% endblock %}
-{% block body_class %}landing{% endblock %}
-{% block content %}
+
+{% block title %}
+ChurnShield AI — Predict Customer Churn with AI
+{% endblock %}
+
+{% block body_class %}
+landing
+{% endblock %}
+
+{% block public_content %}
 
 <nav class="navbar">
-  <a class="navbar-brand" href="/"><span class="brand-icon">◈</span> ChurnShield<span class="brand-ai"> AI</span></a>
+
+  <a class="navbar-brand"
+     href="/">
+
+    <span class="brand-icon">◈</span>
+
+    ChurnShield
+
+    <span class="brand-ai">
+      AI
+    </span>
+
+  </a>
+
   <div class="nav-links">
-    <a href="{{ url_for('login') }}" class="btn btn-ghost">Login</a>
-    <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+
+    <a href="{{ url_for('login') }}"
+       class="btn btn-ghost">
+
+       Login
+
+    </a>
+
+    <a href="{{ url_for('register') }}"
+       class="btn btn-primary">
+
+       Get Started
+
+    </a>
+
   </div>
+
 </nav>
 
+<!-- HERO -->
 <section class="hero">
+
   <div class="hero-bg">
+
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
+
     <div class="grid-overlay"></div>
+
   </div>
+
+  <!-- LEFT -->
   <div class="hero-content">
-    <div class="hero-badge"><span class="badge-dot"></span> Powered by Random Forest AI</div>
+
+    <div class="hero-badge">
+
+      <span class="badge-dot"></span>
+
+      Powered by Random Forest AI
+
+    </div>
+
     <h1 class="hero-title">
-      Predict Customer<br/>
-      <span class="gradient-text">Churn with AI</span>
+
+      Predict Customer
+      <br>
+
+      <span class="gradient-text">
+        Churn with AI
+      </span>
+
     </h1>
+
     <p class="hero-subtitle">
-      Stop losing customers before it's too late. Our ML-powered platform identifies at-risk customers with 
-      explainable insights so your team can act fast.
+
+      Stop losing customers before it's too late.
+      Our ML-powered platform identifies at-risk
+      customers with explainable insights so your
+      team can act fast.
+
     </p>
+
     <div class="hero-cta">
-      <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
-        <i class="fa fa-rocket"></i> Start Free Now
+
+      <a href="{{ url_for('register') }}"
+         class="btn btn-primary btn-lg">
+
+        <i class="fa fa-rocket"></i>
+
+        Start Free Now
+
       </a>
-      <a href="#features" class="btn btn-outline btn-lg">
-        <i class="fa fa-play-circle"></i> See How It Works
+
+      <a href="#features"
+         class="btn btn-outline btn-lg">
+
+        <i class="fa fa-play-circle"></i>
+
+        See How It Works
+
       </a>
+
     </div>
+
+    <!-- STATS -->
     <div class="hero-stats">
-      <div class="stat"><span class="stat-num">95%</span><span class="stat-label">Accuracy</span></div>
-      <div class="stat-sep"></div>
-      <div class="stat"><span class="stat-num">2K+</span><span class="stat-label">Predictions</span></div>
-      <div class="stat-sep"></div>
-      <div class="stat"><span class="stat-num">Real-time</span><span class="stat-label">Results</span></div>
-    </div>
-  </div>
-  <div class="hero-visual">
-    <div class="dashboard-preview">
-      <div class="preview-header">
-        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-        <span class="preview-title">ChurnShield Dashboard</span>
+
+      <div class="stat">
+
+        <span class="stat-num">
+          95%
+        </span>
+
+        <span class="stat-label">
+          Accuracy
+        </span>
+
       </div>
+
+      <div class="stat-sep"></div>
+
+      <div class="stat">
+
+        <span class="stat-num">
+          2K+
+        </span>
+
+        <span class="stat-label">
+          Predictions
+        </span>
+
+      </div>
+
+      <div class="stat-sep"></div>
+
+      <div class="stat">
+
+        <span class="stat-num">
+          Real-time
+        </span>
+
+        <span class="stat-label">
+          Results
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT -->
+  <div class="hero-visual">
+
+    <div class="dashboard-preview">
+
+      <div class="preview-header">
+
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+
+        <span class="preview-title">
+          ChurnShield Dashboard
+        </span>
+
+      </div>
+
       <div class="preview-body">
+
         <div class="preview-card churn">
-          <div class="preview-label">Churn Risk</div>
-          <div class="preview-value red-text">HIGH — 82%</div>
-          <div class="preview-bar"><div class="preview-fill" style="width:82%;background:var(--danger)"></div></div>
+
+          <div class="preview-label">
+            Churn Risk
+          </div>
+
+          <div class="preview-value red-text">
+            HIGH — 82%
+          </div>
+
+          <div class="preview-bar">
+
+            <div class="preview-fill"
+                 style="width:82%;background:var(--danger)">
+            </div>
+
+          </div>
+
         </div>
+
         <div class="preview-card safe">
-          <div class="preview-label">Safe Customers</div>
-          <div class="preview-value green-text">LOW — 18%</div>
-          <div class="preview-bar"><div class="preview-fill" style="width:18%;background:var(--success)"></div></div>
+
+          <div class="preview-label">
+            Safe Customers
+          </div>
+
+          <div class="preview-value green-text">
+            LOW — 18%
+          </div>
+
+          <div class="preview-bar">
+
+            <div class="preview-fill"
+                 style="width:18%;background:var(--success)">
+            </div>
+
+          </div>
+
         </div>
+
+        <!-- MINI CHART -->
         <div class="preview-mini-charts">
+
           <div class="mini-bar" style="height:60%"></div>
           <div class="mini-bar" style="height:80%"></div>
           <div class="mini-bar" style="height:45%"></div>
@@ -69,68 +227,199 @@
           <div class="mini-bar" style="height:55%"></div>
           <div class="mini-bar" style="height:70%"></div>
           <div class="mini-bar" style="height:38%"></div>
+
         </div>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
 
-<section class="features" id="features">
+<!-- FEATURES -->
+<section class="features"
+         id="features">
+
   <div class="container">
+
     <div class="section-header">
-      <h2>Everything You Need to <span class="gradient-text">Retain Customers</span></h2>
-      <p>Built for Indian telecom & SaaS businesses with local payment methods and rupee pricing</p>
+
+      <h2>
+
+        Everything You Need to
+
+        <span class="gradient-text">
+          Retain Customers
+        </span>
+
+      </h2>
+
+      <p>
+        Built for Indian telecom & SaaS businesses
+        with local payment methods and rupee pricing
+      </p>
+
     </div>
+
     <div class="features-grid">
+
       <div class="feature-card">
-        <div class="feature-icon"><i class="fa fa-brain"></i></div>
-        <h3>AI-Powered Predictions</h3>
-        <p>Random Forest model trained on 2000+ customer records with 95% accuracy</p>
+
+        <div class="feature-icon">
+          <i class="fa fa-brain"></i>
+        </div>
+
+        <h3>
+          AI-Powered Predictions
+        </h3>
+
+        <p>
+          Random Forest model trained on 2000+
+          customer records with high accuracy
+        </p>
+
       </div>
+
       <div class="feature-card">
-        <div class="feature-icon"><i class="fa fa-chart-pie"></i></div>
-        <h3>Visual Insights</h3>
-        <p>Interactive charts, heatmaps, and feature importance graphs powered by Chart.js</p>
+
+        <div class="feature-icon">
+          <i class="fa fa-chart-pie"></i>
+        </div>
+
+        <h3>
+          Visual Insights
+        </h3>
+
+        <p>
+          Interactive charts and feature
+          importance visualizations
+        </p>
+
       </div>
+
       <div class="feature-card">
-        <div class="feature-icon"><i class="fa fa-lightbulb"></i></div>
-        <h3>Explainable AI</h3>
-        <p>Human-readable reasons for every prediction — not a black box</p>
+
+        <div class="feature-icon">
+          <i class="fa fa-lightbulb"></i>
+        </div>
+
+        <h3>
+          Explainable AI
+        </h3>
+
+        <p>
+          Human-readable reasons for every
+          churn prediction
+        </p>
+
       </div>
+
       <div class="feature-card">
-        <div class="feature-icon"><i class="fa fa-database"></i></div>
-        <h3>Prediction History</h3>
-        <p>Every prediction saved to your account with full input data and timestamps</p>
+
+        <div class="feature-icon">
+          <i class="fa fa-database"></i>
+        </div>
+
+        <h3>
+          Prediction History
+        </h3>
+
+        <p>
+          Every prediction saved securely
+          with timestamps
+        </p>
+
       </div>
+
       <div class="feature-card">
-        <div class="feature-icon"><i class="fa fa-shield-halved"></i></div>
-        <h3>Secure Auth</h3>
-        <p>Bcrypt-hashed passwords, session management, and route protection</p>
+
+        <div class="feature-icon">
+          <i class="fa fa-shield-halved"></i>
+        </div>
+
+        <h3>
+          Secure Authentication
+        </h3>
+
+        <p>
+          Password hashing and protected
+          dashboard routes
+        </p>
+
       </div>
+
       <div class="feature-card">
-        <div class="feature-icon"><i class="fa fa-india"></i></div>
-        <h3>Indian Context</h3>
-        <p>UPI, Credit/Debit Card, and Cash payments. ₹ Rupee pricing fields</p>
+
+        <div class="feature-icon">
+          <i class="fa fa-india"></i>
+        </div>
+
+        <h3>
+          Indian Business Context
+        </h3>
+
+        <p>
+          ₹ pricing and telecom-focused
+          customer analytics
+        </p>
+
       </div>
+
     </div>
+
   </div>
+
 </section>
 
+<!-- CTA -->
 <section class="cta-section">
+
   <div class="container">
+
     <div class="cta-box">
-      <h2>Ready to Reduce Churn?</h2>
-      <p>Join hundreds of businesses already using ChurnShield AI to retain customers.</p>
-      <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Create Free Account <i class="fa fa-arrow-right"></i></a>
+
+      <h2>
+        Ready to Reduce Churn?
+      </h2>
+
+      <p>
+        Join businesses already using
+        ChurnShield AI to retain customers.
+      </p>
+
+      <a href="{{ url_for('register') }}"
+         class="btn btn-primary btn-lg">
+
+        Create Free Account
+
+        <i class="fa fa-arrow-right"></i>
+
+      </a>
+
     </div>
+
   </div>
+
 </section>
 
+<!-- FOOTER -->
 <footer class="footer">
+
   <div class="container">
-    <span>© 2025 ChurnShield AI. Built with Flask + ML.</span>
-    <span>Made with ❤️ for Indian Businesses</span>
+
+    <span>
+      © 2025 ChurnShield AI.
+      Built with Flask + ML.
+    </span>
+
+    <span>
+      Made with ❤️ for Indian Businesses
+    </span>
+
   </div>
+
 </footer>
 
 {% endblock %}

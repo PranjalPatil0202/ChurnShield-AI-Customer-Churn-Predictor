@@ -1,35 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{% block title %}ChurnShield AI{% endblock %}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
-  {% block extra_css %}{% endblock %}
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>
+
+    {% block title %}
+      ChurnShield AI
+    {% endblock %}
+
+  </title>
+
+  <!-- MAIN CSS -->
+  <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/main.css') }}">
+
+  <!-- GOOGLE FONT -->
+  <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  {% block extra_css %}
+  {% endblock %}
+
 </head>
+
 <body class="{% block body_class %}{% endblock %}">
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div class="flash-container">
-      {% for category, message in messages %}
-        <div class="flash flash-{{ category }}">
-          <i class="fa {% if category == 'success' %}fa-check-circle{% elif category == 'danger' %}fa-exclamation-circle{% elif category == 'warning' %}fa-triangle-exclamation{% else %}fa-info-circle{% endif %}"></i>
-          {{ message }}
-          <button class="flash-close" onclick="this.parentElement.remove()">×</button>
-        </div>
-      {% endfor %}
+<!-- ================================================= -->
+<!-- LOGGED-IN USER -->
+<!-- ================================================= -->
+{% if session.get('user_id') %}
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- LOGO -->
+    <div class="sidebar-logo">
+
+      <span class="brand-icon">◈</span>
+
+      ChurnShield
+
+      <span class="brand-ai">
+        AI
+      </span>
+
     </div>
-  {% endif %}
-{% endwith %}
 
-{% block content %}{% endblock %}
+    <!-- NAVIGATION -->
+    <nav class="sidebar-nav">
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
-{% block extra_js %}{% endblock %}
+      <!-- DASHBOARD -->
+      <a href="{{ url_for('dashboard') }}"
+         class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+
+        <i class="fa fa-grid-2"></i>
+
+        Dashboard
+
+      </a>
+
+      <!-- PREDICTION -->
+      <a href="{{ url_for('predict') }}"
+         class="nav-item {% if request.endpoint == 'predict' %}active{% endif %}">
+
+        <i class="fa fa-brain"></i>
+
+        New Prediction
+
+      </a>
+
+      <!-- CSV -->
+      <a href="{{ url_for('upload_csv') }}"
+         class="nav-item {% if request.endpoint == 'upload_csv' %}active{% endif %}">
+
+        <i class="fa fa-file-csv"></i>
+
+        CSV Upload
+
+      </a>
+
+      <!-- HISTORY -->
+      <a href="{{ url_for('history') }}"
+         class="nav-item {% if request.endpoint == 'history' %}active{% endif %}">
+
+        <i class="fa fa-clock-rotate-left"></i>
+
+        History
+
+      </a>
+
+    </nav>
+
+    <!-- USER SECTION -->
+    <div class="sidebar-footer">
+
+      {% if user %}
+
+      <div class="user-badge">
+
+        <!-- AVATAR -->
+        <div class="user-avatar">
+
+          {{ user.full_name[0].upper() }}
+
+        </div>
+
+        <!-- INFO -->
+        <div>
+
+          <div class="user-name">
+
+            {{ user.full_name }}
+
+          </div>
+
+          <div class="user-email">
+
+            {{ user.email }}
+
+          </div>
+
+        </div>
+
+      </div>
+
+      {% endif %}
+
+      <!-- LOGOUT -->
+      <a href="{{ url_for('logout') }}"
+         class="btn btn-ghost btn-sm mt-2">
+
+        <i class="fa fa-right-from-bracket"></i>
+
+        Logout
+
+      </a>
+
+    </div>
+
+  </aside>
+
+  <!-- ================================================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ================================================= -->
+  <main class="main-content">
+
+    {% block content %}
+    {% endblock %}
+
+  </main>
+
+</div>
+
+<!-- ================================================= -->
+<!-- PUBLIC PAGES -->
+<!-- ================================================= -->
+{% else %}
+
+{% block public_content %}
+{% endblock %}
+
+{% endif %}
+
+<!-- EXTRA JS -->
+{% block extra_js %}
+{% endblock %}
+
+<!-- PASSWORD TOGGLE -->
+<script>
+
+function togglePw(fieldId, btn) {
+
+    const input = document.getElementById(fieldId);
+
+    const icon = btn.querySelector("i");
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        icon.classList.remove("fa-eye");
+
+        icon.classList.add("fa-eye-slash");
+
+    }
+
+    else {
+
+        input.type = "password";
+
+        icon.classList.remove("fa-eye-slash");
+
+        icon.classList.add("fa-eye");
+
+    }
+}
+
+</script>
+
 </body>
 </html>

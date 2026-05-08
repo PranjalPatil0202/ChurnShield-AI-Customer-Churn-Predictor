@@ -1,41 +1,150 @@
 {% extends "base.html" %}
-{% block title %}Login — ChurnShield AI{% endblock %}
-{% block body_class %}auth-page{% endblock %}
-{% block content %}
+
+{% block title %}
+Login — ChurnShield AI
+{% endblock %}
+
+{% block body_class %}
+auth-page
+{% endblock %}
+
+{% block public_content %}
 
 <div class="auth-bg">
+
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
+
 </div>
 
 <div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-logo"><a href="/"><span class="brand-icon">◈</span> ChurnShield<span class="brand-ai"> AI</span></a></div>
-    <h2 class="auth-title">Welcome Back</h2>
-    <p class="auth-sub">Sign in to your dashboard</p>
 
-    <form method="POST" action="{{ url_for('login') }}" class="auth-form" id="loginForm">
+  <div class="auth-card">
+
+    <!-- LOGO -->
+    <div class="auth-logo">
+
+      <a href="/">
+
+        <span class="brand-icon">◈</span>
+
+        ChurnShield
+
+        <span class="brand-ai">
+          AI
+        </span>
+
+      </a>
+
+    </div>
+
+    <!-- TITLE -->
+    <h2 class="auth-title">
+      Welcome Back
+    </h2>
+
+    <p class="auth-sub">
+      Sign in to your dashboard
+    </p>
+
+    <!-- FORM -->
+    <form method="POST"
+          action="{{ url_for('login') }}"
+          class="auth-form"
+          id="loginForm">
+
+      <!-- EMAIL -->
       <div class="form-group">
-        <label><i class="fa fa-envelope"></i> Email Address</label>
-        <input type="email" name="email" class="form-input" placeholder="you@example.com" required
+
+        <label>
+
+          <i class="fa fa-envelope"></i>
+
+          Email Address
+
+        </label>
+
+        <input type="email"
+               name="email"
+               class="form-input"
+               placeholder="you@example.com"
+               required
                value="{{ request.form.get('email', '') }}"/>
+
       </div>
+
+      <!-- PASSWORD -->
       <div class="form-group">
-        <label><i class="fa fa-lock"></i> Password</label>
+
+        <label>
+
+          <i class="fa fa-lock"></i>
+
+          Password
+
+        </label>
+
         <div class="input-group">
-          <input type="password" name="password" class="form-input" id="pwField" placeholder="••••••••" required/>
-          <button type="button" class="input-addon" onclick="togglePw('pwField',this)"><i class="fa fa-eye"></i></button>
+
+          <input type="password"
+                 name="password"
+                 class="form-input"
+                 id="pwField"
+                 placeholder="••••••••"
+                 required/>
+
+          <button type="button"
+                  class="input-addon"
+                  onclick="togglePw('pwField',this)">
+
+            <i class="fa fa-eye"></i>
+
+          </button>
+
         </div>
+
       </div>
-      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
-        <span class="btn-text"><i class="fa fa-sign-in-alt"></i> Sign In</span>
-        <span class="btn-loader hidden"><i class="fa fa-spinner fa-spin"></i> Signing in...</span>
+
+      <!-- BUTTON -->
+      <button type="submit"
+              class="btn btn-primary btn-block"
+              id="loginBtn">
+
+        <span class="btn-text">
+
+          <i class="fa fa-sign-in-alt"></i>
+
+          Sign In
+
+        </span>
+
+        <span class="btn-loader hidden">
+
+          <i class="fa fa-spinner fa-spin"></i>
+
+          Signing in...
+
+        </span>
+
       </button>
+
     </form>
 
+    <!-- FOOTER -->
     <div class="auth-footer">
-      Don't have an account? <a href="{{ url_for('register') }}">Create one free</a>
+
+      Don't have an account?
+
+      <a href="{{ url_for('register') }}">
+
+        Create one free
+
+      </a>
+
     </div>
+
   </div>
+
 </div>
+
 {% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}CSV Upload — ChurnShield AI{% endblock %}
+{% block body_class %}app-page{% endblock %}
+
+{% block content %}
+
+<!-- TOP BAR -->
+<div class="page-topbar">
+
+  <a href="{{ url_for('dashboard') }}"
+     class="btn btn-ghost">
+
+     ← Back to Dashboard
+
+  </a>
+
+</div>
+
+<!-- PAGE TITLE -->
+<h1 class="page-title">
+  Upload Customer CSV
+</h1>
+
+<!-- CARD -->
+<div class="chart-card">
+
+  <p style="margin-bottom:20px;color:var(--text2)">
+    Upload telecom customer data CSV for bulk churn prediction.
+  </p>
+
+  <form method="POST"
+        enctype="multipart/form-data">
+
+    <input type="file"
+           name="file"
+           required>
+
+    <br><br>
+
+    <button type="submit"
+            class="btn btn-primary">
+
+      Upload & Predict
+
+    </button>
+
+  </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}CSV Results — ChurnShield AI{% endblock %}
+{% block body_class %}app-page{% endblock %}
+
+{% block content %}
+
+<!-- TOP BAR -->
+<div class="page-topbar">
+
+  <a href="{{ url_for('dashboard') }}"
+     class="btn btn-ghost">
+
+     ← Back to Dashboard
+
+  </a>
+
+</div>
+
+<!-- PAGE TITLE -->
+<h1 class="page-title">
+  CSV Prediction Results
+</h1>
+
+<!-- CARD -->
+<div class="chart-card">
+
+  <p style="margin-bottom:20px;color:var(--text2)">
+    Showing first 20 predictions
+  </p>
+
+  <div style="overflow-x:auto;">
+
+    {{ tables|safe }}
+
+  </div>
+
+  <br>
+
+  <a href="{{ download_link }}"
+     class="btn btn-primary">
+
+     Download CSV
+
+  </a>
+
+</div>
+
+{% endblock %}

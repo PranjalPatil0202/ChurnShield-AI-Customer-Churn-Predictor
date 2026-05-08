@@ -1,125 +1,276 @@
 {% extends "base.html" %}
 {% block title %}Dashboard — ChurnShield AI{% endblock %}
 {% block body_class %}app-page{% endblock %}
+
 {% block content %}
 
-<div class="app-layout">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-logo"><span class="brand-icon">◈</span> ChurnShield<span class="brand-ai"> AI</span></div>
-    <nav class="sidebar-nav">
-      <a href="{{ url_for('dashboard') }}" class="nav-item active"><i class="fa fa-grid-2"></i> Dashboard</a>
-      <a href="{{ url_for('predict') }}" class="nav-item"><i class="fa fa-brain"></i> New Prediction</a>
-      <a href="{{ url_for('history') }}" class="nav-item"><i class="fa fa-clock-rotate-left"></i> History</a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="user-badge">
-        <div class="user-avatar">{{ user.full_name[0].upper() }}</div>
-        <div>
-          <div class="user-name">{{ user.full_name }}</div>
-          <div class="user-email">{{ user.email }}</div>
-        </div>
-      </div>
-      <a href="{{ url_for('logout') }}" class="btn btn-ghost btn-sm mt-2"><i class="fa fa-right-from-bracket"></i> Logout</a>
-    </div>
-  </aside>
+<!-- Header -->
+<header class="page-header">
 
-  <!-- Main -->
-  <main class="main-content">
-    <header class="page-header">
-      <div>
-        <h1 class="page-title">Welcome back, <span class="gradient-text">{{ user.full_name.split()[0] }}</span> 👋</h1>
-        <p class="page-sub">Here's your prediction overview</p>
-      </div>
-      <a href="{{ url_for('predict') }}" class="btn btn-primary"><i class="fa fa-plus"></i> New Prediction</a>
-    </header>
+  <div>
 
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon blue"><i class="fa fa-chart-bar"></i></div>
-        <div class="stat-info">
-          <span class="stat-num">{{ total_preds }}</span>
-          <span class="stat-label">Total Predictions</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon {% if last_pred and last_pred.churn_result %}red{% else %}green{% endif %}">
-          <i class="fa fa-{% if last_pred and last_pred.churn_result %}triangle-exclamation{% else %}shield-check{% endif %}"></i>
-        </div>
-        <div class="stat-info">
-          <span class="stat-num">
-            {% if last_pred %}
-              {% if last_pred.churn_result %}CHURN{% else %}SAFE{% endif %}
-            {% else %}—{% endif %}
-          </span>
-          <span class="stat-label">Last Prediction</span>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon purple"><i class="fa fa-percent"></i></div>
-        <div class="stat-info">
-          <span class="stat-num">
-            {% if last_pred %}{{ (last_pred.churn_probability * 100)|round(1) }}%{% else %}—{% endif %}
-          </span>
-          <span class="stat-label">Last Probability</span>
-        </div>
-      </div>
+    <h1 class="page-title">
+      Welcome back,
+      <span class="gradient-text">
+        {{ user.full_name.split()[0] }}
+      </span> 👋
+    </h1>
+
+    <p class="page-sub">
+      Here's your churn analytics dashboard
+    </p>
+
+  </div>
+
+  <div>
+
+    <a href="{{ url_for('predict') }}"
+       class="btn btn-primary">
+
+      <i class="fa fa-plus"></i>
+      New Prediction
+
+    </a>
+
+    <a href="{{ url_for('upload_csv') }}"
+       class="btn btn-primary"
+       style="margin-left:10px;">
+
+      <i class="fa fa-file-csv"></i>
+      Upload CSV
+
+    </a>
+
+  </div>
+
+</header>
+
+<!-- Stats -->
+<div class="stats-grid">
+
+  <!-- Total Predictions -->
+  <div class="stat-card">
+
+    <div class="stat-icon blue">
+      <i class="fa fa-chart-bar"></i>
     </div>
 
-    <!-- Recent predictions -->
-    <div class="section-card">
-      <div class="card-header">
-        <h2><i class="fa fa-clock-rotate-left"></i> Recent Predictions</h2>
-        <a href="{{ url_for('history') }}" class="btn btn-ghost btn-sm">View All</a>
-      </div>
-      {% if recent %}
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr><th>Customer ID</th><th>Date</th><th>Result</th><th>Probability</th><th>Action</th></tr>
-          </thead>
-          <tbody>
-            {% for p in recent %}
-            <tr>
-              <td><code>{{ p.customer_id or 'N/A' }}</code></td>
-              <td>{{ p.created_at[:16] }}</td>
-              <td>
-                <span class="badge {% if p.churn_result %}badge-danger{% else %}badge-success{% endif %}">
-                  {% if p.churn_result %}⚠ CHURN{% else %}✓ SAFE{% endif %}
-                </span>
-              </td>
-              <td>
-                <div class="prob-bar">
-                  <div class="prob-fill {% if p.churn_probability > 0.6 %}danger{% elif p.churn_probability > 0.4 %}warn{% else %}safe{% endif %}"
-                       style="width:{{ (p.churn_probability*100)|round|int }}%"></div>
-                  <span>{{ (p.churn_probability*100)|round(1) }}%</span>
-                </div>
-              </td>
-              <td><a href="{{ url_for('predict') }}" class="btn btn-ghost btn-xs">Re-predict</a></td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      {% else %}
-      <div class="empty-state">
-        <i class="fa fa-chart-line"></i>
-        <p>No predictions yet. <a href="{{ url_for('predict') }}">Make your first prediction</a>.</p>
-      </div>
-      {% endif %}
+    <div class="stat-info">
+
+      <span class="stat-num">
+        {{ total_preds }}
+      </span>
+
+      <span class="stat-label">
+        Total Predictions
+      </span>
+
     </div>
 
-    <!-- Quick action -->
-    <div class="quick-action-card">
-      <div class="qa-text">
-        <h3>Ready to analyze a customer?</h3>
-        <p>Fill in customer details and get an instant churn prediction with visual insights.</p>
-      </div>
-      <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
-        <i class="fa fa-brain"></i> Run Prediction
-      </a>
+  </div>
+
+  <!-- Last Prediction -->
+  <div class="stat-card">
+
+    <div class="stat-icon {% if last_pred and last_pred.churn_result %}red{% else %}green{% endif %}">
+
+      <i class="fa fa-{% if last_pred and last_pred.churn_result %}triangle-exclamation{% else %}shield-check{% endif %}"></i>
+
     </div>
-  </main>
+
+    <div class="stat-info">
+
+      <span class="stat-num">
+
+        {% if last_pred %}
+
+          {% if last_pred.churn_result %}
+            CHURN
+          {% else %}
+            SAFE
+          {% endif %}
+
+        {% else %}
+          —
+        {% endif %}
+
+      </span>
+
+      <span class="stat-label">
+        Last Prediction
+      </span>
+
+    </div>
+
+  </div>
+
+  <!-- Last Probability -->
+  <div class="stat-card">
+
+    <div class="stat-icon purple">
+      <i class="fa fa-percent"></i>
+    </div>
+
+    <div class="stat-info">
+
+      <span class="stat-num">
+
+        {% if last_pred %}
+          {{ (last_pred.churn_probability * 100)|round(1) }}%
+        {% else %}
+          —
+        {% endif %}
+
+      </span>
+
+      <span class="stat-label">
+        Last Probability
+      </span>
+
+    </div>
+
+  </div>
+
 </div>
+
+<!-- Recent Predictions -->
+<div class="section-card">
+
+  <div class="card-header">
+
+    <h2>
+      <i class="fa fa-clock-rotate-left"></i>
+      Recent Predictions
+    </h2>
+
+    <a href="{{ url_for('history') }}"
+       class="btn btn-ghost btn-sm">
+
+      View All
+
+    </a>
+
+  </div>
+
+  {% if recent %}
+
+  <div class="table-wrap">
+
+    <table class="data-table">
+
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Date</th>
+          <th>Result</th>
+          <th>Probability</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for p in recent %}
+
+        <tr>
+
+          <td>
+            <code>{{ p.customer_id or 'N/A' }}</code>
+          </td>
+
+          <td>
+            {{ p.created_at[:16] }}
+          </td>
+
+          <td>
+
+            <span class="badge {% if p.churn_result %}badge-danger{% else %}badge-success{% endif %}">
+
+              {% if p.churn_result %}
+                ⚠ CHURN
+              {% else %}
+                ✓ SAFE
+              {% endif %}
+
+            </span>
+
+          </td>
+
+          <td>
+
+            <div class="prob-bar">
+
+              <div class="prob-fill
+                {% if p.churn_probability > 0.6 %}
+                  danger
+                {% elif p.churn_probability > 0.4 %}
+                  warn
+                {% else %}
+                  safe
+                {% endif %}
+              "
+              style="width:{{ (p.churn_probability*100)|round|int }}%">
+              </div>
+
+              <span>
+                {{ (p.churn_probability*100)|round(1) }}%
+              </span>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+        {% endfor %}
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  {% else %}
+
+  <div class="empty-state">
+
+    <i class="fa fa-chart-line"></i>
+
+    <p>
+      No predictions yet.
+      <a href="{{ url_for('predict') }}">
+        Make your first prediction
+      </a>.
+    </p>
+
+  </div>
+
+  {% endif %}
+
+</div>
+
+<!-- CSV Feature Card -->
+<div class="quick-action-card">
+
+  <div class="qa-text">
+
+    <h3>
+      Bulk Customer Analytics
+    </h3>
+
+    <p>
+      Upload customer CSV files and generate churn predictions instantly.
+    </p>
+
+  </div>
+
+  <a href="{{ url_for('upload_csv') }}"
+     class="btn btn-primary btn-lg">
+
+     <i class="fa fa-file-csv"></i>
+     Upload CSV
+
+  </a>
+
+</div>
+
 {% endblock %}
